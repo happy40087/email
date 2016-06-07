@@ -25,7 +25,7 @@ def GET(url):
 def scrape(start, url_filter):
 	further_work = {start}
 	already_seen = {start}
-	
+	mail=[]
 	i=1
 	while further_work:
 		call_tuple = further_work.pop()
@@ -35,9 +35,16 @@ def scrape(start, url_filter):
 		try:
 			response = requests.get(url)
 			text = response.text 
+			mail=re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}",text)
+			if len(mail):
+				print('\033[31m')
+				print(len(mail))
+				print('\033[0m')
+			else:
+				print('\033[31m0\033[0m')
 			print('\033[32m')
-			print(re.findall(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}",text))			
-			print('\033[0m\n')	
+			print(mail)
+			print('\033[0m')
 		except urllib.error.HTTPError as e:
 			print(e.code)
 			print(e.msg)
